@@ -2,7 +2,7 @@ var h2m = require('./')
 var fs = require('fs')
 var path = require('path')
 
-var html = fs.readFileSync(path.join(__dirname, './fixtures/source.html'))
+var html = fs.readFileSync(path.join(__dirname, './fixtures/source.html'), 'utf8')
 
 var md = h2m(html)
 

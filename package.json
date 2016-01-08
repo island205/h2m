@@ -1,0 +1,20 @@
+{
+  "name": "h2m",
+  "version": "1.0.0",
+  "description": "Transform HTML to markdown base on posthtml.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "posthtml",
+    "markdown",
+    "html"
+  ],
+  "author": "island205@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "posthtml": "^0.8.0",
+    "posthtml-parser": "^0.1.1"
+  }
+}

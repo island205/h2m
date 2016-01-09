@@ -1,0 +1,71 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0px;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+.converter {
+    height: 100%;
+    margin-right: 260px;
+    background-color: black;
+}
+
+.html-editor, .markdown-editor {
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+
+.markdown-editor {
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 14px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.markdown-previewer {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.preview-toggle {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    padding: 5px 10px;
+    opacity: .5;
+    border: 1px solid #ccc;
+}
+
+.preview-toggle:hover {
+    opacity: 1;
+}
+
+aside {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 260px;
+    padding: 20px;
+    box-sizing: border-box;
+}

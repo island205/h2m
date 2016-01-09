@@ -4,7 +4,8 @@
   "description": "Transform HTML to markdown base on posthtml.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "build": "browserify browser.js -o dist/h2m.js"
   },
   "keywords": [
     "posthtml",

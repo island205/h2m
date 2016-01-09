@@ -53,12 +53,16 @@ module.exports = function (html) {
     }
   })
   walk.call(tree, function (node) {
+    var text
     if (typeof node == 'string') {
       md.push(node)
     } else if (typeof node == 'object'){
       switch (node.tag) {
         case 'a':
-          md.push(`[${getTextInNode(node)}](${node.attrs.href})`)
+          text = getTextInNode(node)
+          if (text) {
+            md.push(`[${}](${node.attrs.href})`)
+          }
           node.content = []
           break;
         case 'img':

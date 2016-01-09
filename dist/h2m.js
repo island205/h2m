@@ -120,7 +120,7 @@ function getMarkdownInNode(node) {
       node.content = []
       break
     // block
-    case 'br':
+    case 'hr':
       md.push('\n---\n')
       node.content = []
       break
@@ -144,6 +144,13 @@ function getMarkdownInNode(node) {
       break
     case 'pre':
       md.push(`\n    ${getTextInNode(node).split('\n').join('\n    ')}\n`)
+      node.content = []
+      break
+    case 'div':
+      mdBlock = node.content.map(function (node) {
+        return getMarkdownInNode(node)
+      }).join('')
+      md.push(`\n${mdBlock}\n`)
       node.content = []
       break
     case 'p':

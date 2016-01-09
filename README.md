@@ -19,3 +19,19 @@ var h2m = require('h2m')
 var md = html('<h1>Hello World</h1>')
 // md = '# Hello World'
 ```
+
+## Supported
+
+- :heavy_check_mark: br
+- :heavy_check_mark: em
+- :heavy_check_mark: strong
+- :heavy_check_mark: code
+- :heavy_check_mark: a
+- :heavy_check_mark: img
+- :heavy_check_mark: hr
+- :heavy_check_mark: ul, ol
+- :heavy_check_mark: pre
+- :heavy_check_mark: div
+- :heavy_check_mark: p
+- :heavy_check_mark: blockquote
+- :heavy_check_mark: h1 ~ h6

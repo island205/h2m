@@ -20,7 +20,7 @@ function isTextString(str) {
 }
 
 function getTextInNode(node) {
-  var text = []
+  var text = [], txt
   walk.call(node, function(node) {
     if (typeof node == 'string') {
       text.push(node)
@@ -28,11 +28,41 @@ function getTextInNode(node) {
       switch (node.tag) {
         case 'br':
           text.push('\n')
-          break;
-        case 'a':
-          text.push(`[${getTextInNode(node)}](${node.attrs.href})`)
+          break
+        case 'em':
+          txt = node.content[0]
+          if (txt) {
+            text.push(`*${txt}*`)
+          }
           node.content = []
-          break;
+          break
+        case 'strong':
+          txt = node.content[0]
+          if (txt) {
+            text.push(`**${txt}**`)
+          }
+          node.content = []
+          break
+        case 'code':
+          txt = node.content[0]
+          if (txt) {
+            text.push(`\`${txt}\``)
+          }
+          node.content = []
+          break
+        case 'a':
+          txt = getTextInNode(node)
+          if (txt) {
+            text.push(`[${txt}](${node.attrs.href})`)
+          }
+          node.content = []
+          break
+        case 'img':
+          if (node.attrs.src) {
+            text.push(` ![${(node.attrs.title || node.attrs.alt || node.attrs.src).trim()}](${node.attrs.src}) `)
+          }
+          node.content = []
+          break
         default:
 
       }
@@ -40,6 +70,117 @@ function getTextInNode(node) {
     return node
   })
   return text.join('').replace(commentRegex, '').trim()
+}
+
+function getMarkdownInNode(node) {
+  var md = []
+  var text
+  var mdBlock
+  switch (node.tag) {
+    // inline
+    case 'br':
+      text.push('\n')
+      break
+    case 'em':
+      text = node.content[0]
+      if (text) {
+        md.push(`*${text}*`)
+      }
+      node.content = []
+      break
+    case 'strong':
+      text = node.content[0]
+      if (text) {
+        md.push(`**${text}**`)
+      }
+      node.content = []
+      break
+    case 'code':
+      text = node.content[0]
+      if (text) {
+        md.push(`\`${text}\``)
+      }
+      node.content = []
+      break
+    case 'a':
+      text = getTextInNode(node)
+      if (text) {
+        md.push(`[${text}](${node.attrs.href})`)
+      }
+      node.content = []
+      break
+    case 'img':
+      if (node.attrs.src) {
+        md.push(` ![${(node.attrs.title || node.attrs.alt || node.attrs.src).trim()}](${node.attrs.src}) `)
+      }
+      node.content = []
+      break
+    // block
+    case 'br':
+      md.push('\n---\n')
+      node.content = []
+      break
+    case 'ul':
+      text = node.content.filter(function (node) {
+        return typeof node == 'object' && node.tag == 'li'
+      }).map(function (node, index) {
+        return `- ${getTextInNode(node)}`
+      }).join('\n')
+      md.push(`\n${text}\n`)
+      node.content = []
+      break
+    case 'ol':
+      text = node.content.filter(function (node) {
+        return typeof node == 'object' && node.tag == 'li'
+      }).map(function (node, index) {
+        return `${index+1}. ${getTextInNode(node)}`
+      }).join('\n')
+      md.push(`\n${text}\n`)
+      node.content = []
+      break
+    case 'pre':
+      md.push(`\n    ${getTextInNode(node).split('\n').join('\n    ')}\n`)
+      node.content = []
+      break
+    case 'p':
+      md.push(`\n${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'blockquote':
+      mdBlock = node.content.map(function (node) {
+        return getMarkdownInNode(node)
+      }).join('')
+      md.push(`\n> ${mdBlock.split('\n').join('\n> ')}\n`)
+      node.content = []
+      break
+    case 'h1':
+      md.push(`\n# ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'h2':
+      md.push(`\n## ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'h3':
+      md.push(`\n### ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'h4':
+      md.push(`\n#### ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'h5':
+      md.push(`\n##### ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    case 'h6':
+      md.push(`\n###### ${getTextInNode(node)}\n`)
+      node.content = []
+      break
+    default:
+      // do nothing
+  }
+  return md.join('')
 }
 
 module.exports = function (html) {
@@ -53,63 +194,10 @@ module.exports = function (html) {
     }
   })
   walk.call(tree, function (node) {
-    var text
     if (typeof node == 'string') {
       md.push(node)
     } else if (typeof node == 'object'){
-      switch (node.tag) {
-        case 'a':
-          text = getTextInNode(node)
-          if (text) {
-            md.push(`[${}](${node.attrs.href})`)
-          }
-          node.content = []
-          break;
-        case 'img':
-          if (node.attrs.src) {
-            md.push(` ![${(node.attrs.title || node.attrs.alt || node.attrs.src).trim()}](${node.attrs.src}) `)
-          }
-          node.content = []
-          break;
-        case 'pre':
-          md.push(`\n    ${getTextInNode(node).split('\n').join('\n    ')}\n`)
-          node.content = []
-          break;
-        case 'p':
-          md.push(`\n${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'blockquote':
-          md.push(`\n> ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h1':
-          md.push(`\n# ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h2':
-          md.push(`\n## ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h3':
-          md.push(`\n### ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h4':
-          md.push(`\n#### ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h5':
-          md.push(`\n##### ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        case 'h6':
-          md.push(`\n###### ${getTextInNode(node)}\n`)
-          node.content = []
-          break;
-        default:
-          // do nothing
-      }
+      md.push(getMarkdownInNode(node))
     }
     return node
   })

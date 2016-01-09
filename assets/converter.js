@@ -3,6 +3,7 @@
     this.htmlEditor = document.querySelector('#html')
     this.markDownEditor = document.querySelector('#markdown')
     this.markDownPreviewer = document.querySelector('.markdown-previewer')
+    this.errorMessageWrapper = document.querySelector('.error-message-wrapper')
     this.bindEvents()
   }
 
@@ -13,11 +14,12 @@
       var newHTML = self.htmlEditor.value
       var md
       if (html != newHTML) {
+        self.notifyError('')
         try {
           md = h2m(newHTML)
           self.setM(md)
         } catch(e) {
-
+          self.notifyError((e && e.message) || 'Convert Error')
         }
         html = newHTML
       }
@@ -36,6 +38,14 @@
   Converter.prototype.setM = function (md) {
     this.markDownEditor.value = md
     this.markDownPreviewer.innerHTML = markdown.toHTML(md)
+  }
+
+  Converter.prototype.notifyError = function (msg) {
+    if (msg) {
+      this.errorMessageWrapper.innerHTML = '<p class="error-message">' + msg + '</p>'
+    } else {
+      this.errorMessageWrapper.innerHTML = ''
+    }
   }
 
   new Converter()

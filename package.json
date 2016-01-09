@@ -1,6 +1,6 @@
 {
   "name": "h2m",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Transform HTML to markdown base on posthtml.",
   "main": "index.js",
   "scripts": {

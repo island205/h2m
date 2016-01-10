@@ -1,4 +1,4 @@
-var h2m = require('./')
+var h2m = require('../index')
 var fs = require('fs')
 var path = require('path')
 

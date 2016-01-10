@@ -36,6 +36,7 @@
   }
 
   Converter.prototype.setM = function (md) {
+    console.log(JSON.stringify(md))
     this.markDownEditor.value = md
     this.markDownPreviewer.innerHTML = markdown.toHTML(md)
   }

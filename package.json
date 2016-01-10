@@ -14,9 +14,9 @@
   ],
   "author": "island205@gmail.com",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "chai": "^3.4.1",
-    "posthtml": "^0.8.0",
+    "posthtml": "^0.8.1",
     "posthtml-parser": "^0.1.1"
   }
 }

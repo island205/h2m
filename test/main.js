@@ -3,7 +3,7 @@ var expect = require('chai').expect
 var path = require('path')
 var fs = require('fs')
 function fixture(file) {
-  return fs.readFileSync(path.join(__dirname, `fixtures/${file}`), 'utf8')
+  return fs.readFileSync(path.join(__dirname, `fixtures/${file}`), 'utf8').replace(/\n$/, '')
 }
 
 describe('h2m', function () {
@@ -58,7 +58,7 @@ describe('h2m', function () {
 
   it('should parse div tag', function () {
     expect(h2m('<div>code</div>')).to.equal('code')
-    // expect(h2m('<div>code<div>code</div></div>')).to.equal('code\n\ncode')
+    expect(h2m('<div>code<div>code</div></div>')).to.equal('code\n\ncode')
     expect(h2m('<div>code<div><div>code</div></div></div>')).to.equal('code\n\ncode')
   })
 
@@ -69,7 +69,7 @@ describe('h2m', function () {
 
   it('should parse blockquote tag', function () {
     expect(h2m('<blockquote>code</blockquote>')).to.equal('> code')
-    // expect(h2m('<blockquote><blockquote>code</blockquote></blockquote>')).to.equal('>> code')
+    expect(h2m('<blockquote><blockquote>code</blockquote></blockquote>')).to.equal('> > code')
   })
 
   it('should parse h* tag', function () {

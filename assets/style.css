@@ -49,14 +49,6 @@ textarea {
     overflow-y: auto;
 }
 
-.error-message-wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: .5;
-}
-
 .error-message {
     background-color: rgba(255, 243, 102, 0.53);
     margin: 0;
@@ -75,7 +67,7 @@ textarea {
     border: 1px solid #ccc;
 }
 
-.preview-toggle:hover, .error-message-wrapper:hover {
+.preview-toggle:hover {
     opacity: 1;
 }
 

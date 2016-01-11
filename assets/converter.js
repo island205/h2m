@@ -4,6 +4,7 @@
     this.markDownEditor = document.querySelector('#markdown')
     this.markDownPreviewer = document.querySelector('.markdown-previewer')
     this.errorMessageWrapper = document.querySelector('.error-message-wrapper')
+    this.submitAIssue = document.querySelector('#submit-a-issue')
     this.bindEvents()
   }
 
@@ -14,12 +15,12 @@
       var newHTML = self.htmlEditor.value
       var md
       if (html != newHTML) {
-        self.notifyError('')
+        self.notifyError(null)
         try {
           md = h2m(newHTML)
           self.setM(md)
         } catch(e) {
-          self.notifyError((e && e.message) || 'Convert Error')
+          self.notifyError(e || 'Convert Error')
         }
         html = newHTML
       }
@@ -41,13 +42,20 @@
     this.markDownPreviewer.innerHTML = markdown.toHTML(md)
   }
 
-  Converter.prototype.notifyError = function (msg) {
-    if (msg) {
-      this.errorMessageWrapper.innerHTML = '<p class="error-message">' + msg + '</p>'
+  Converter.prototype.notifyError = function (err) {
+    if (err == undefined) {
+      return this.submitAIssue.href = 'https://github.com/island205/h2m/issues/new'
+    }
+    alert('Ops, please submit a issue with link in right!')
+    if (typeof err == 'object') {
+      this.submitAIssue.href = 'https://github.com/island205/h2m/issues/new?'
+        + 'title=Can\'t convert:' + err.message
+        + '&body=' + err.stack + '-------html-------' + this.htmlEditor.value
     } else {
-      this.errorMessageWrapper.innerHTML = ''
+      this.submitAIssue.href = 'https://github.com/island205/h2m/issues/new?'
+        + 'title=' + err
+        + '&body=' + '-------html-------' + this.htmlEditor.value
     }
   }
-
   new Converter()
 })()

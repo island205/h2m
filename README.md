@@ -18,7 +18,7 @@ $npm install h2m
 ```javascript
 var h2m = require('h2m')
 
-var md = html('<h1>Hello World</h1>')
+var md = h2m('<h1>Hello World</h1>')
 // md = '# Hello World'
 ```
 

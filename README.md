@@ -1,5 +1,7 @@
 # h2m
 
+[![npm](https://img.shields.io/npm/v/h2m.svg)](https://www.npmjs.com/package/h2m)
+
 Tool for converting HTML to Markdown.
 
 online converter: http://island205.github.io/h2m/
@@ -35,3 +37,4 @@ var md = html('<h1>Hello World</h1>')
 - :heavy_check_mark: p
 - :heavy_check_mark: blockquote
 - :heavy_check_mark: h1 ~ h6
+- :airplane: table

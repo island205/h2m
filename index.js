@@ -2,7 +2,7 @@ var posthtml = require('posthtml')
 var parser = require('posthtml-parser')
 var walk = require('posthtml/lib/api').walk
 
-var nonTextTags = ['script', 'style', 'link', 'head']
+var nonTextTags = ['script', 'style', 'link', 'head', 'noscript']
 var commentRegex = /<!--[\s\S]*?-->/g
 var nonTextStringMatchers = ['<!DOCTYPE html>', commentRegex, /^\s+$/]
 var escapeMap = {
@@ -12,7 +12,8 @@ var escapeMap = {
   "&quot;": "\"",
   "&#x27;": "'",
   "&#x60;": "`",
-  "&nbsp;": " "
+  "&nbsp;": " ",
+  "&#8202;": " "
 }
 
 var unescape = (function () {
@@ -75,28 +76,28 @@ function getTextInNode(node) {
           text.push('\n')
           break
         case 'em':
-          txt = node.content[0]
+          txt = getTextInNode(node)
           if (txt) {
             text.push(`*${txt.trim()}*`)
           }
           node.content = []
           break
         case 'strong':
-          txt = node.content && node.content[0]
+          txt = getTextInNode(node)
           if (txt) {
             text.push(`**${txt.trim()}**`)
           }
           node.content = []
           break
         case 'code':
-          txt = node.content[0]
+          txt = getTextInNode(node)
           if (txt) {
             text.push(`\`${txt.trim()}\``)
           }
           node.content = []
           break
         case 'a':
-          txt = getTextInNode(node)
+          txt = getTextInNode(node) || node.attrs.href
           if (txt) {
             text.push(`[${txt}](${node.attrs.href})`)
           }
@@ -114,7 +115,7 @@ function getTextInNode(node) {
     }
     return node
   })
-  return text.join('').replace(commentRegex, '').trim()
+  return unescape(text.join('').replace(commentRegex, '').trim())
 }
 
 /**
@@ -137,21 +138,21 @@ function getMarkdownInNode(node) {
         md.push('\n')
         break
       case 'em':
-        text = node.content && node.content[0]
+        text = getTextInNode(node)
         if (text) {
           md.push(`*${text}*`)
         }
         node.content = []
         break
       case 'strong':
-        text = node.content && node.content[0]
+        text = getTextInNode(node)
         if (text) {
           md.push(`**${text}**`)
         }
         node.content = []
         break
       case 'code':
-        text = node.content && node.content[0]
+        text = getTextInNode(node)
         if (text) {
           md.push(`\`${text}\``)
         }
@@ -199,7 +200,10 @@ function getMarkdownInNode(node) {
         md.push(`\n\n    ${unescape(getTextInPreNode(node)).split('\n').join('\n    ')}`)
         node.content = []
         break
+      // pure block element
       case 'div':
+      // figcaption http://www.w3schools.com/tags/tag_figcaption.asp
+      case 'figcaption':
         md.push(`\n\n${getMarkdownInTree(node.content)}`)
         node.content = []
         break

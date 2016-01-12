@@ -1,5 +1,7 @@
 # h2m
 
+![logo](./design/logo@0.5.png)
+
 [![npm](https://img.shields.io/npm/v/h2m.svg)](https://www.npmjs.com/package/h2m)
 
 Tool for converting HTML to Markdown.
@@ -22,7 +24,9 @@ var md = h2m('<h1>Hello World</h1>')
 // md = '# Hello World'
 ```
 
-## Supported
+## Support
+
+`h2m` supports standard Markdown sytax: [CommonMark](http://commonmark.org/help/) now.
 
 - :heavy_check_mark: br
 - :heavy_check_mark: em
@@ -37,4 +41,7 @@ var md = h2m('<h1>Hello World</h1>')
 - :heavy_check_mark: p
 - :heavy_check_mark: blockquote
 - :heavy_check_mark: h1 ~ h6
-- :airplane: table
+
+## Contribution
+
+PRs are welcome to implement other extend Markdown language, like [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra), [GFM](https://help.github.com/articles/github-flavored-markdown/) and so on.

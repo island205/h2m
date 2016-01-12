@@ -1,10 +1,11 @@
 {
   "name": "h2m",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Transform HTML to markdown base on posthtml.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha && npm run coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "build": "browserify browser.js -o dist/h2m.js"
   },
   "keywords": [
@@ -12,14 +13,25 @@
     "markdown",
     "html"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/island205/h2m.git"
+  },
+  "bugs": {
+    "url": "https://github.com/island205/h2m/issues"
+  },
+  "homepage": "http://island205.github.io/h2m/",
   "author": "island205@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "chai": "^3.4.1",
     "posthtml": "^0.8.1",
     "posthtml-parser": "^0.1.1"
   },
   "devDependencies": {
-    "chai": "^3.4.1"
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.4",
+    "jscoverage": "^0.6.0",
+    "mocha": "^2.3.4",
+    "mocha-lcov-reporter": "^1.0.0"
   }
 }

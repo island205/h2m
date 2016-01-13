@@ -3,35 +3,20 @@
 var h2m = require('../index')
 var program = require('commander')
 var request = require('request')
-var phantom = require('phantom')
 var path = require('path')
 var fs = require('fs')
 var pkg = require('../package.json')
 
-function loadHTMLFromURI(uri, enablePhantomJS, callback) {
-  if (enablePhantomJS) {
-    phantom.create(function (ph) {
-      ph.onConsoleMessage = function () {}
-      ph.createPage(function (page) {
-        page.onConsoleMessage = function(msg) {
-          // console.log(msg)
-        }
-        page.open(uri, function (status) {
-          page.evaluate(function () { return document.body.innerHTML }, function (html) {
-            callback(html)
-            ph.exit()
-          })
-        })
-      })
-    })
-  } else {
-    request(uri, function (error, response, body) {
-      if (error) {
-      } else if (response.statusCode == 200) {
-        callback(body)
-      }
-    })
-  }
+function loadHTMLFromURI(uri, callback) {
+  request(uri, function (error, response, body) {
+    if (error) {
+      throw error
+    } else if (response.statusCode == 200) {
+      callback(body)
+    } else {
+      throw new Error('can\'t get html from ' + uri)
+    }
+  })
 }
 
 function loadHTMLFromFile(filepath) {
@@ -39,26 +24,20 @@ function loadHTMLFromFile(filepath) {
 }
 
 function onHTMLReady(html) {
-  // console.log(h2m(html))
-}
-
-
-function run(program) {
-  if (program.uri) {
-    loadHTMLFromURI(program.uri, program.phantomjs, onHTMLReady)
-  } else if (program.file) {
-    onHTMLReady(loadHTMLFromFile(program.file))
-  } else {
-    throw new Error('an http url or file path must be given')
-  }
+  console.log(h2m(html))
 }
 
 program
   .version(pkg.version)
-  .option('-p, --phantomjs', "use PhantomJS to render HTML")
-  .option('-f, --file [file path]', "set the file path want to convert")
-  .option('-u, --uri [http url]', "set the url of page want to convert ")
-  .parse(process.argv)
+  .arguments('<file>')
+  .action(function(file) {
+    if (/^(http|https):\/\//.test(file)) {
+      loadHTMLFromURI(file, onHTMLReady)
+    } else if (file) {
+      onHTMLReady(loadHTMLFromFile(file))
+    } else {
+      throw new Error('an http url or file path must be given')
+    }
+  })
 
-
-run(program)
+program.parse(process.argv)

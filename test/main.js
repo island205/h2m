@@ -45,6 +45,7 @@ describe('h2m', function () {
 
   it('should parse ul tag', function () {
     expect(h2m(fixture('ul.html'))).to.equal(fixture('ul.md'))
+    expect(h2m('<ul></ul>')).to.equal('')
   })
 
   it('should parse ol tag', function () {

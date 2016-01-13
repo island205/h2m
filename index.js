@@ -180,12 +180,14 @@ function getMarkdownInNode(node) {
         node.content = []
         break
       case 'ul':
-        text = node.content.filter(function (node) {
+        text = node.content && node.content.filter(function (node) {
           return typeof node == 'object' && node.tag == 'li'
         }).map(function (node, index) {
           return `- ${getTextInNode(node)}`
         }).join('\n')
-        md.push(`\n\n${text}`)
+        if (text) {
+          md.push(`\n\n${text}`)
+        }
         node.content = []
         break
       case 'ol':

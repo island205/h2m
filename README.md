@@ -26,6 +26,51 @@ var md = h2m('<h1>Hello World</h1>')
 // md = '# Hello World'
 ```
 
+## CLI
+
+### install
+
+```bash
+$ npm install h2m -g
+```
+
+### usage
+
+```
+$h2m -h
+
+Usage: h2m [options] <file>
+
+Options:
+
+  -h, --help     output usage information
+  -V, --version  output the version number
+```
+
+Convert a local file:
+
+```bash
+$ h2m index.html
+
+converting HTML to Markdown
+
+made by [@island205](https://github.com/island205)
+
+Can't be convert? welcome to submit an [issue](https://github.com/island205/h2m/issues/new).
+```
+
+Convert an online url:
+
+```bash
+$ h2m https://baidu.com
+```
+
+Save result:
+
+```bash
+$ h2m https://google.com > google.md
+```
+
 ## Support
 
 `h2m` supports standard Markdown sytax: [CommonMark](http://commonmark.org/help/) now.

@@ -29,12 +29,14 @@ describe('h2m', function () {
   it('should parse a tag', function () {
     expect(h2m('<a href="http://island205.github.io/h2m/">h2m</a>')).to.equal('[h2m](http://island205.github.io/h2m/)')
     expect(h2m('<a href="http://island205.github.io/h2m/"></a>')).to.equal('[http://island205.github.io/h2m/](http://island205.github.io/h2m/)')
+    expect(h2m('<a href="">h2m</a>')).to.equal('')
   })
 
   it('should parse img tag', function () {
     expect(h2m('<img title="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" />')).to.equal('![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)')
     expect(h2m('<img alt="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" />')).to.equal('![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)')
     expect(h2m('<img src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" />')).to.equal('![https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)')
+    expect(h2m('<img />')).to.equal('')
   })
 
   it('should parse hr tag', function () {
@@ -79,6 +81,28 @@ describe('h2m', function () {
     expect(h2m('<h4>code</h4>')).to.equal('#### code')
     expect(h2m('<h5>code</h5>')).to.equal('##### code')
     expect(h2m('<h6>code</h6>')).to.equal('###### code')
+  })
+
+  it('should parse nested inline tag', function () {
+    expect(h2m('<h1><a href="http://island205.github.io/h2m/">h2m</a></h1>')).to.equal('# [h2m](http://island205.github.io/h2m/)')
+    expect(h2m('<h1><em></em>h2m</h1>')).to.equal('# h2m')
+    expect(h2m('<h1><strong></strong>h2m</h1>')).to.equal('# h2m')
+    expect(h2m('<h1><code></code>h2m</h1>')).to.equal('# h2m')
+    expect(h2m('<h1><a></a>h2m</h1>')).to.equal('# h2m')
+    expect(h2m('<h1><img />h2m</h1>')).to.equal('# h2m')
+    expect(h2m('<h1><a href="http://island205.github.io/h2m/"></a></h1>')).to.equal('# [http://island205.github.io/h2m/](http://island205.github.io/h2m/)')
+    expect(h2m('<a href="http://island205.github.io/h2m/">h2<br/>m</a>')).to.equal('[h2\nm](http://island205.github.io/h2m/)')
+    expect(h2m('<a href="http://island205.github.io/h2m/">h<em>2</em>m</a>')).to.equal('[h*2*m](http://island205.github.io/h2m/)')
+    expect(h2m('<h2>h<strong>2</strong>m</h2>')).to.equal('## h**2**m')
+    expect(h2m('<h2><code>h2m</code></h2>')).to.equal('## `h2m`')
+    expect(h2m('<a href="http://island205.github.io/h2m/"><img title="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
+    expect(h2m('<a href="http://island205.github.io/h2m/"><img alt="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
+    expect(h2m('<a href="http://island205.github.io/h2m/"><img src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
+  })
+
+  it('should ignore other unsupport tag', function () {
+    expect(h2m('<article>code</article>')).to.equal('code')
+    expect(h2m('<h2>co<i>d</i>e</h2>')).to.equal('## code')
   })
 
 })

@@ -101,19 +101,21 @@ function getTextInNode(node) {
           node.content = []
           break
         case 'a':
-          txt = getTextInNode(node) || node.attrs.href
+          txt = getTextInNode(node) || (node.attrs && node.attrs.href)
           if (txt) {
             text.push(`[${txt}](${node.attrs.href})`)
           }
           node.content = []
           break
         case 'img':
-          if (node.attrs.src) {
+          if (node.attrs && node.attrs.src) {
             text.push(` ![${(node.attrs.title || node.attrs.alt || node.attrs.src).trim()}](${node.attrs.src}) `)
           }
           node.content = []
           break
         default:
+          text.push(getTextInNode(node))
+          node.content = []
 
       }
     }
@@ -171,7 +173,7 @@ function getMarkdownInNode(node) {
         node.content = []
         break
       case 'img':
-        if (node.attrs.src) {
+        if (node.attrs && node.attrs.src) {
           md.push(`![${(node.attrs.title || node.attrs.alt || node.attrs.src).trim()}](${node.attrs.src})`)
         }
         node.content = []

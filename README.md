@@ -34,6 +34,8 @@ var md = h2m('<h1>Hello World</h1>')
 $ npm install h2m -g
 ```
 
+[![h2m downloads](https://nodei.co/npm-dl/h2m.png?months=1)](https://www.npmjs.com/package/h2m)
+
 ### usage
 
 ```

@@ -21,7 +21,7 @@ describe('h2m', function () {
     expect(h2m('<strong></strong>')).to.equal('')
   })
 
-  it('should parse code tag to <code>txt</code>', function () {
+  it('should parse code tag to `txt`', function () {
     expect(h2m('<code>txt</code>')).to.equal('`txt`')
     expect(h2m('<code></code>')).to.equal('')
   })
@@ -29,7 +29,7 @@ describe('h2m', function () {
   it('should parse a tag', function () {
     expect(h2m('<a href="http://island205.github.io/h2m/">h2m</a>')).to.equal('[h2m](http://island205.github.io/h2m/)')
     expect(h2m('<a href="http://island205.github.io/h2m/"></a>')).to.equal('[http://island205.github.io/h2m/](http://island205.github.io/h2m/)')
-    expect(h2m('<a href="">h2m</a>')).to.equal('')
+    expect(h2m('<a href="">h2m</a>')).to.equal('[h2m](h2m)')
   })
 
   it('should parse img tag', function () {
@@ -53,26 +53,26 @@ describe('h2m', function () {
   })
 
   it('should parse pre tag', function () {
-    expect(h2m('<pre>code</pre>')).to.equal('    code')
-    expect(h2m('<pre><code>code</code></pre>')).to.equal('    code')
+    expect(h2m('<pre>code</pre>')).to.equal('    code\n')
+    expect(h2m('<pre><code>code</code></pre>')).to.equal('    code\n')
     expect(h2m(fixture('pre.html'))).to.equal(fixture('pre.md'))
     expect(h2m(fixture('pre2.html'))).to.equal(fixture('pre2.md'))
   })
 
   it('should parse div tag', function () {
-    expect(h2m('<div>code</div>')).to.equal('code')
-    expect(h2m('<div>code<div>code</div></div>')).to.equal('code\n\ncode')
-    expect(h2m('<div>code<div><div>code</div></div></div>')).to.equal('code\n\ncode')
+    expect(h2m('<div>code</div>')).to.equal('code\n')
+    expect(h2m('<div>code<div>code</div></div>')).to.equal('code\ncode\n')
+    expect(h2m('<div>code<div><div>code</div></div></div>')).to.equal('code\ncode\n')
   })
 
   it('should parse p tag', function () {
-    expect(h2m('<p>code</p>')).to.equal('code')
-    expect(h2m('<p>code</p><p>code</p>')).to.equal('code\n\ncode')
+    expect(h2m('<p>code</p>')).to.equal('code\n')
+    expect(h2m('<p>code</p><p>code</p>')).to.equal('code\ncode\n')
   })
 
   it('should parse blockquote tag', function () {
-    expect(h2m('<blockquote>code</blockquote>')).to.equal('> code')
-    expect(h2m('<blockquote><blockquote>code</blockquote></blockquote>')).to.equal('> > code')
+    expect(h2m('<blockquote>code</blockquote>')).to.equal('> code\n')
+    expect(h2m('<blockquote><blockquote>code</blockquote></blockquote>')).to.equal('> > code\n')
   })
 
   it('should parse h* tag', function () {

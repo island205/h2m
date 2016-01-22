@@ -1,6 +1,6 @@
 {
   "name": "h2m",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Transform HTML to markdown base on posthtml.",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
+    "htmlparser2": "^3.9.0",
     "posthtml": "^0.8.1",
     "posthtml-parser": "^0.1.1",
     "request": "^2.67.0"

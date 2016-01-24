@@ -1,3 +1,4 @@
 module.exports = {
-  'CommonMark': require('./commonmark')
+  'CommonMark': require('./commonmark'),
+  'MarkdownExtra': require('./markdown-extra')
 }

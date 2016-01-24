@@ -6,7 +6,19 @@ function fixture(file) {
   return fs.readFileSync(path.join(__dirname, `fixtures/${file}`), 'utf8').replace(/\n$/, '')
 }
 
-describe('h2m', function () {
+describe('api', function () {
+  it('should to overide converter behavior', function () {
+      expect(h2m('<br/>', {
+          overides: {
+              br: function() {
+                  return `\n\n\n`
+              }
+          }
+      }), '\n\n\n')
+  })
+})
+
+describe('CommonMark', function () {
   it('should parse <br /> to \\n', function () {
     expect(h2m('z<br/>')).to.equal('z\n')
   })
@@ -60,14 +72,14 @@ describe('h2m', function () {
   })
 
   it('should parse div tag', function () {
-    expect(h2m('<div>code</div>')).to.equal('code\n')
-    expect(h2m('<div>code<div>code</div></div>')).to.equal('code\ncode\n')
-    expect(h2m('<div>code<div><div>code</div></div></div>')).to.equal('code\ncode\n')
+    expect(h2m('<div>code</div>')).to.equal('\ncode\n')
+    expect(h2m('<div>code<div>code</div></div>')).to.equal('\ncode\ncode\n')
+    expect(h2m('<div>code<div><div>code</div></div></div>')).to.equal('\ncode\ncode\n')
   })
 
   it('should parse p tag', function () {
-    expect(h2m('<p>code</p>')).to.equal('code\n')
-    expect(h2m('<p>code</p><p>code</p>')).to.equal('code\ncode\n')
+    expect(h2m('<p>code</p>')).to.equal('\ncode\n')
+    expect(h2m('<p>code</p><p>code</p>')).to.equal('\ncode\n\ncode\n')
   })
 
   it('should parse blockquote tag', function () {
@@ -76,26 +88,26 @@ describe('h2m', function () {
   })
 
   it('should parse h* tag', function () {
-    expect(h2m('<h1>code</h1>')).to.equal('# code')
-    expect(h2m('<h2>code</h2>')).to.equal('## code')
-    expect(h2m('<h3>code</h3>')).to.equal('### code')
-    expect(h2m('<h4>code</h4>')).to.equal('#### code')
-    expect(h2m('<h5>code</h5>')).to.equal('##### code')
-    expect(h2m('<h6>code</h6>')).to.equal('###### code')
+    expect(h2m('<h1>code</h1>')).to.equal('\n# code\n')
+    expect(h2m('<h2>code</h2>')).to.equal('\n## code\n')
+    expect(h2m('<h3>code</h3>')).to.equal('\n### code\n')
+    expect(h2m('<h4>code</h4>')).to.equal('\n#### code\n')
+    expect(h2m('<h5>code</h5>')).to.equal('\n##### code\n')
+    expect(h2m('<h6>code</h6>')).to.equal('\n###### code\n')
   })
 
   it('should parse nested inline tag', function () {
-    expect(h2m('<h1><a href="http://island205.github.io/h2m/">h2m</a></h1>')).to.equal('# [h2m](http://island205.github.io/h2m/)')
-    expect(h2m('<h1><em></em>h2m</h1>')).to.equal('# h2m')
-    expect(h2m('<h1><strong></strong>h2m</h1>')).to.equal('# h2m')
-    expect(h2m('<h1><code></code>h2m</h1>')).to.equal('# h2m')
-    expect(h2m('<h1><a></a>h2m</h1>')).to.equal('# h2m')
-    expect(h2m('<h1><img />h2m</h1>')).to.equal('# h2m')
-    expect(h2m('<h1><a href="http://island205.github.io/h2m/"></a></h1>')).to.equal('# [http://island205.github.io/h2m/](http://island205.github.io/h2m/)')
+    expect(h2m('<h1><a href="http://island205.github.io/h2m/">h2m</a></h1>')).to.equal('\n# [h2m](http://island205.github.io/h2m/)\n')
+    expect(h2m('<h1><em></em>h2m</h1>')).to.equal('\n# h2m\n')
+    expect(h2m('<h1><strong></strong>h2m</h1>')).to.equal('\n# h2m\n')
+    expect(h2m('<h1><code></code>h2m</h1>')).to.equal('\n# h2m\n')
+    expect(h2m('<h1><a></a>h2m</h1>')).to.equal('\n# h2m\n')
+    expect(h2m('<h1><img />h2m</h1>')).to.equal('\n# h2m\n')
+    expect(h2m('<h1><a href="http://island205.github.io/h2m/"></a></h1>')).to.equal('\n# [http://island205.github.io/h2m/](http://island205.github.io/h2m/)\n')
     expect(h2m('<a href="http://island205.github.io/h2m/">h2<br/>m</a>')).to.equal('[h2\nm](http://island205.github.io/h2m/)')
     expect(h2m('<a href="http://island205.github.io/h2m/">h<em>2</em>m</a>')).to.equal('[h*2*m](http://island205.github.io/h2m/)')
-    expect(h2m('<h2>h<strong>2</strong>m</h2>')).to.equal('## h**2**m')
-    expect(h2m('<h2><code>h2m</code></h2>')).to.equal('## `h2m`')
+    expect(h2m('<h2>h<strong>2</strong>m</h2>')).to.equal('\n## h**2**m\n')
+    expect(h2m('<h2><code>h2m</code></h2>')).to.equal('\n## `h2m`\n')
     expect(h2m('<a href="http://island205.github.io/h2m/"><img title="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
     expect(h2m('<a href="http://island205.github.io/h2m/"><img alt="h2m" src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![h2m](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
     expect(h2m('<a href="http://island205.github.io/h2m/"><img src="https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png" /></a>')).to.equal('[![https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png](https://raw.githubusercontent.com/island205/h2m/master/images/online-converter.png)](http://island205.github.io/h2m/)')
@@ -103,7 +115,19 @@ describe('h2m', function () {
 
   it('should ignore other unsupport tag', function () {
     expect(h2m('<article>code</article>')).to.equal('code')
-    expect(h2m('<h2>co<i>d</i>e</h2>')).to.equal('## code')
+    expect(h2m('<h2>co<i>d</i>e</h2>')).to.equal('\n## code\n')
   })
 
+})
+
+describe('MarkdownExtra', function () {
+    it('should support Special Attributes', function () {
+        expect(h2m('<h1 class="h2m">h2m</h1>', {
+            converter: 'MarkdownExtra'
+        })).to.equal('\n# h2m # (.h2m)\n')
+        expect(h2m('<h1 id="h2m" class="h2m">h2m</h1>', {
+            converter: 'MarkdownExtra'
+        })).to.equal('\n# h2m # (#h2m .h2m)\n')
+    })
+    
 })

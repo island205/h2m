@@ -25,12 +25,28 @@ var unescape = (function () {
   }
 })()
 
+/**
+ * @param html {String} the html to be onverted
+ * @param options {Object}
+ *   {
+ *      converter {String} which converter you choose
+ *      overides {Object<String, Function>} override converter behavior, for example:
+ *          {
+ *              br: function (node) {
+ *                  return `\n\n` // let br tag break twice
+ *              }
+ *          } 
+ *   }
+ */
 module.exports = function (html, options) {
   options = Object.assign({
     converter: 'CommonMark'
   }, options)
-
-  var converter = converters[options.converter]
+  
+  var converter = Object.assign(
+      Object.create(converters[options.converter]),
+       options.overides || {}
+  )
 
   var nodeBuffer = []
   var results = []
@@ -58,7 +74,6 @@ module.exports = function (html, options) {
       }
       text = text.trim()
       text = unescape(text)
-      console.log(text)
       var last = nodeBuffer[nodeBuffer.length - 1]
       if (last) {
         last.md = last.md || []

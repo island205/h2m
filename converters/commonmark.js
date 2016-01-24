@@ -17,32 +17,32 @@ module.exports = {
   },
   h1: function (node) {
     if (node.md) {
-      return `# ${node.md}`
+      return `\n# ${node.md}\n`
     }
   },
   h2: function (node) {
     if (node.md) {
-      return `## ${node.md}`
+      return `\n## ${node.md}\n`
     }
   },
   h3: function (node) {
     if (node.md) {
-      return `### ${node.md}`
+      return `\n### ${node.md}\n`
     }
   },
   h4: function (node) {
     if (node.md) {
-      return `#### ${node.md}`
+      return `\n#### ${node.md}\n`
     }
   },
   h5: function (node) {
     if (node.md) {
-      return `##### ${node.md}`
+      return `\n##### ${node.md}\n`
     }
   },
   h6: function (node) {
     if (node.md) {
-      return `###### ${node.md}`
+      return `\n###### ${node.md}\n`
     }
   },
   a: function (node) {
@@ -59,25 +59,25 @@ module.exports = {
     }
   },
   blockquote: function (node) {
-    if (node.md) {
-      return node.md.split('\n').filter(function (line) {
-        return !/^\s*$/.test(line)
-      }).map(function (line) {
+    var md = node.md
+    if (md) {
+      md = node.md.split('\n').map(function (line) {
         return `> ${line}\n`
       }).join('')
+      return `\n${md}\n`
     }
   },
   ul: function (node) {
     if (node.md) {
-      return `${node.md.replace(new RegExp(LI_HEADER, 'ig'), '-')}`
+      return `\n${node.md.replace(new RegExp(LI_HEADER, 'ig'), '-')}\n`
     }
   },
   ol: function (node) {
     var index = 1
     if (node.md) {
-      return `${node.md.replace(new RegExp(LI_HEADER, 'ig'), function () {
+      return `\n${node.md.replace(new RegExp(LI_HEADER, 'ig'), function () {
         return `${index++}.`
-      })}`
+      })}\n`
     }
   },
   li: function (node) {
@@ -86,7 +86,7 @@ module.exports = {
     }
   },
   hr: function (node) {
-    return '---'
+    return '\n---\n'
   },
   code: function (node) {
     if (node.md) {
@@ -100,30 +100,24 @@ module.exports = {
     return '\n'
   },
   pre: function (node) {
-    console.log('pre', node.md)
-    if (node.md) {
-      node.md = node.md.replace(/\s$/, '')
-      return node.md.split('\n').map(function (line) {
+    var md = node.md
+    if (md) {
+      md = md.split('\n').map(function (line) {
         return `    ${line}\n`
       }).join('')
+      return `\n${md}\n`
     }
   },
   p: function (node) {
     var md = node.md
     if (md) {
-      if (!/\n$/.test(md)) {
-        md += '\n'
-      }
-      return md
+      return `\n${md}\n`
     }
   },
   div: function (node) {
     var md = node.md
     if (md) {
-      if (!/\n$/.test(md)) {
-        md += '\n'
-      }
-      return md
+      return `\n${md}\n`
     }
   },
   'default': function (node) {

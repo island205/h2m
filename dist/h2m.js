@@ -65,7 +65,8 @@ module.exports = {
   blockquote: function (node) {
     var md = node.md
     if (md) {
-      md = node.md.split('\n').map(function (line) {
+      md = md.replace(/(^\n+|\n+$)/g, '')
+      md = md.split('\n').map(function (line) {
         return `> ${line}\n`
       }).join('')
       return `\n${md}\n`
@@ -251,6 +252,7 @@ function generateAbbreviations() {
 }
 
 Extra.cleanup = function (result) {
+  // append abbreviations to tail of markdown 
   return CommonMark.cleanup(`${result}\n\n${generateAbbreviations()}`)
 }
 

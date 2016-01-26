@@ -11,4 +11,3 @@
 11. p
 12. blockquote
 13. h1 ~ h6
-

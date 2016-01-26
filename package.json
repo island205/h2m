@@ -7,7 +7,8 @@
     "test": "mocha && npm run coverage",
     "istanbul": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "build": "browserify browser.js -o dist/h2m.js"
+    "build": "browserify browser.js -o dist/h2m.js",
+    "lint": "eslint index.js converters/commonmark.js converters/markdown-extra.js; exit 0"
   },
   "bin": {
     "h2m": "bin/h2m-cli.js"

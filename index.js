@@ -35,14 +35,14 @@ var unescape = (function () {
  *              br: function (node) {
  *                  return `\n\n` // let br tag break twice
  *              }
- *          } 
+ *          }
  *   }
  */
 module.exports = function (html, options) {
   options = Object.assign({
     converter: 'CommonMark'
   }, options)
-  
+
   var converter = Object.assign(
       Object.create(converters[options.converter]),
        options.overides || {}
@@ -72,7 +72,6 @@ module.exports = function (html, options) {
       if (/^\s+$/.test(text)) {
         return
       }
-      text = text.trim()
       text = unescape(text)
       var last = nodeBuffer[nodeBuffer.length - 1]
       if (last) {
@@ -100,5 +99,8 @@ module.exports = function (html, options) {
   }, {decodeEntities: false})
   parser.write(html)
   parser.end()
-  return results.join('')
+  // remove the \n on head or tail
+  return typeof converter.cleanup == 'function'
+    ? converter.cleanup(results.join(''))
+    : results.join('')
 }

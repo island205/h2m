@@ -55,13 +55,14 @@ module.exports = {
   img: function (node) {
     var src = node.attrs.src
     if (src) {
-      return`![${(node.attrs.title || node.attrs.alt || src).trim()}](${src})`
+      return`![${(node.attrs.title || node.attrs.alt || '').trim()}](${src})`
     }
   },
   blockquote: function (node) {
     var md = node.md
     if (md) {
-      md = node.md.split('\n').map(function (line) {
+      md = md.replace(/(^\n+|\n+$)/g, '')
+      md = md.split('\n').map(function (line) {
         return `> ${line}\n`
       }).join('')
       return `\n${md}\n`
@@ -85,7 +86,7 @@ module.exports = {
       return `${LI_HEADER} ${node.md}\n`
     }
   },
-  hr: function (node) {
+  hr: function () {
     return '\n---\n'
   },
   code: function (node) {
@@ -96,7 +97,7 @@ module.exports = {
       return `\`${node.md}\``
     }
   },
-  br: function (node) {
+  br: function () {
     return '\n'
   },
   pre: function (node) {
@@ -122,5 +123,11 @@ module.exports = {
   },
   'default': function (node) {
     return node.md
+  },
+  cleanup: function (result) {
+    // remove leading or tailing break
+    // convert \n\n\n... to \n\n
+    return result.replace(/(^\n+|\n+$)/g, '')
+                 .replace(/\n{3,}/g, '\n\n')
   }
 }

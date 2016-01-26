@@ -5,6 +5,10 @@
     this.markDownPreviewer = document.querySelector('.markdown-previewer')
     this.errorMessageWrapper = document.querySelector('.error-message-wrapper')
     this.submitAIssue = document.querySelector('#submit-a-issue')
+    this.implementSwitch = document.querySelectorAll('[name=implement]')
+    this.state = {
+      implement: 'CommonMark',
+    }
     this.bindEvents()
   }
 
@@ -17,7 +21,9 @@
       if (html != newHTML) {
         self.notifyError(null)
         try {
-          md = h2m(newHTML)
+          md = h2m(newHTML, {
+            converter: self.state.implement
+          })
           self.setM(md)
         } catch(e) {
           self.notifyError(e || 'Convert Error')
@@ -34,12 +40,26 @@
         self.markDownPreviewer.style.display = 'none'
       }
     })
+    Array.prototype.forEach.call(this.implementSwitch, function (switchEl) {
+      switchEl.addEventListener('click', function () {
+        self.switchImplenentTo(switchEl.value)
+      })
+    })
   }
 
   Converter.prototype.setM = function (md) {
     console.log(JSON.stringify(md))
     this.markDownEditor.value = md
     this.markDownPreviewer.innerHTML = markdown.toHTML(md)
+  }
+
+  Converter.prototype.switchImplenentTo = function (implement) {
+    this.state.implement = implement
+    var html = this.htmlEditor.value
+    md = h2m(html, {
+      converter: this.state.implement
+    })
+    this.setM(md)
   }
 
   Converter.prototype.notifyError = function (err) {

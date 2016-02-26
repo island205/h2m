@@ -161,3 +161,11 @@ describe('nested tag', function () {
     expect(h2m('<blockquote><blockquote>code</blockquote></blockquote>')).to.equal('> > code')
   })
 })
+
+describe('bug', function () {
+  it('#4', function () {
+    expect(h2m(fixture('#4.html'), {
+        converter: 'MarkdownExtra'
+    })).to.equal(fixture('#4.md'))
+  })
+})

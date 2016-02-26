@@ -345,12 +345,13 @@ module.exports = function (html, options) {
     onclosetag: function (name) {
       var last = nodeBuffer.pop()
       var md = convert(last)
-      if (nodeBuffer.length === 0) {
-        return results.push(md)
-      }
 
       if (name === 'pre') {
         isInPreNode = false
+      }
+
+      if (nodeBuffer.length === 0) {
+        return results.push(md)
       }
 
       var tail = nodeBuffer[nodeBuffer.length - 1]

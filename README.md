@@ -132,7 +132,7 @@ $ h2m https://google.com > google.md
 - :white_check_mark: Fenced Code Blocks
 - :white_check_mark: dl, dt, dd Definition Lists
 - :white_check_mark: abbr Abbreviations
-- :ballot_box_with_check: table **welcome PR**.
+- :white_check_mark: table (tks [@天凉](https://github.com/daycool)'s PR')
 
 ## Contribution
 

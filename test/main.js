@@ -138,6 +138,12 @@ describe('MarkdownExtra', function () {
           converter: 'MarkdownExtra'
       })).to.equal(fixture('MarkdownExtra/Abbreviations.md'))
     })
+
+    it('should support table', function () {
+      expect(h2m(fixture('MarkdownExtra/table.html'), {
+          converter: 'MarkdownExtra'
+      })).to.equal(fixture('MarkdownExtra/table.md'))
+    })
 })
 
 describe('api', function () {

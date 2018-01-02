@@ -61,8 +61,67 @@ Extra['pre'] = function (node) {
   return `\n\`\`\`\n${node.md}\n\`\`\`\n`
 }
 
+// Abbreviations
+var abbrs = []
+
+Extra['abbr'] = function (node) {
+  if (node.attrs.title != '') {
+    abbrs.push({
+      word: node.md,
+      title: node.attrs.title
+    })
+  }
+  return node.md
+}
+
+let isHandleTheadChar = false;
+let isTh = false;
+let trCount = 0;
+let thCount = 0;
+
 // Tables
-// Extra['table'] = function (node) {}
+Extra['table'] = function (node) {
+  let theadChar = '';
+  if(!isHandleTheadChar){
+    theadChar = getTeadChar() + '\n';
+  }
+  if(!isTh){
+    resetTable();
+    return '';
+  }
+  resetTable();
+  return `\n${node.md}\n${theadChar}`;
+}
+
+Extra['tr'] = function (node) {
+  let trStr = '';
+  trCount ++;
+
+  trStr = `\n|${node.md}`;
+  
+  if(!isHandleTheadChar && trCount == 2){
+    let theadChar = getTeadChar();
+    isHandleTheadChar = true;
+    return `\n${theadChar}${trStr}`;
+  }else{
+    
+    return `${trStr}`;
+  }
+
+}
+Extra['th'] = function (node) {
+  isTh = true;
+  thCount ++;
+  return `${node.md}|`;
+}
+Extra['td'] = function (node) {
+  isTh = true;
+  if(trCount == 0){
+    thCount ++;
+  }
+  let md = replaceBr(node.md);
+  return `${md}|`;
+}
 
 // Definition Lists
 Extra['dl'] = function (node) {
@@ -72,6 +131,7 @@ Extra['dl'] = function (node) {
   }
 }
 Extra['dt'] = function (node) {
+  // console.log(node)
   var md = node.md
   if (md) {
     return `${md}\n`
@@ -84,17 +144,24 @@ Extra['dd'] = function (node) {
   }
 }
 
-// Abbreviations
-var abbrs = []
+function resetTable(){
+  isTr = false;
+  isTh = false;
+  thCount = 0;
+  trCount = 0;
+  isHandleTheadChar = false;
+}
 
-Extra['abbr'] = function (node) {
-  if (node.attrs.title != '') {
-    abbrs.push({
-      word: node.md,
-      title: node.attrs.title
-    })
+function getTeadChar(){
+  let theadChar = '|';
+  for(let i=thCount;i>0;i--){
+    theadChar += '--------|';
   }
-  return node.md
+  return theadChar;
+}
+
+function replaceBr(content){
+  return content.replace(/(<br>)|(<br\/>)|(\n)|(\r\n)/g, '');
 }
 
 function generateAbbreviations() {

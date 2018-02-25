@@ -1,4 +1,4 @@
-var htmlparser = require("htmlparser2")
+var htmlparser = require('htmlparser2-without-node-native')
 var converters = require('./converters/')
 
 var escapeMap = {

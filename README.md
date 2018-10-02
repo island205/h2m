@@ -74,6 +74,8 @@ $ npm install h2m -g
 ```
 $h2m -h
 
+Usage: h2m [options]
+
 Options:
 
   -V, --version      output the version number

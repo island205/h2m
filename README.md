@@ -74,18 +74,18 @@ $ npm install h2m -g
 ```
 $h2m -h
 
-Usage: h2m [options] <file>
-
 Options:
 
-  -h, --help     output usage information
-  -V, --version  output the version number
+  -V, --version      output the version number
+  -f, --file <file>  HTML file path or an url adress (default: )
+  -c, --clipboard    read HTML from clipboard
+  -h, --help         output usage information
 ```
 
 Convert a local file:
 
 ```bash
-$ h2m index.html
+$ h2m  -f index.html
 
 converting HTML to Markdown
 
@@ -97,13 +97,19 @@ Can't be convert? welcome to submit an [issue](https://github.com/island205/h2m/
 Convert an online url:
 
 ```bash
-$ h2m https://baidu.com
+$ h2m -f https://baidu.com
+```
+
+Convert from clipboard:
+
+```bash
+$ h2m -c
 ```
 
 Save result:
 
 ```bash
-$ h2m https://google.com > google.md
+$ h2m  -f https://google.com > google.md
 ```
 
 ## Support

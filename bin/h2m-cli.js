@@ -6,6 +6,7 @@ var request = require('request')
 var path = require('path')
 var fs = require('fs')
 var pkg = require('../package.json')
+var clipboardy = require('clipboardy')
 
 function loadHTMLFromURI(uri, callback) {
   request(uri, function (error, response, body) {
@@ -29,14 +30,17 @@ function onHTMLReady(html) {
 
 program
   .version(pkg.version)
-  .arguments('<file>')
-  .action(function(file) {
-    if (/^(http|https):\/\//.test(file)) {
-      loadHTMLFromURI(file, onHTMLReady)
-    } else if (file) {
-      onHTMLReady(loadHTMLFromFile(file))
+  .option('-f, --file <file>', 'HTML file path or an url adress', '')
+  .option('-c, --clipboard', 'read HTML from clipboard')
+  .action(function(env) {
+    if (env.clipboard) {
+      onHTMLReady(clipboardy.readSync() || '')
+    } else if (/^(http|https):\/\//.test(env.file)) {
+      loadHTMLFromURI(env.file, onHTMLReady)
+    } else if (env.file) {
+      onHTMLReady(loadHTMLFromFile(env.file))
     } else {
-      throw new Error('an http url or file path must be given')
+      console.log('use h2m -h to learn usage')
     }
   })
 

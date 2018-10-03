@@ -31,7 +31,7 @@
   "dependencies": {
     "clipboardy": "~1.2.3",
     "commander": "^2.9.0",
-    "htmlparser2": "^3.9.0",
+    "htmlparser2-without-node-native": "^3.9.0",
     "request": "^2.67.0"
   },
   "devDependencies": {

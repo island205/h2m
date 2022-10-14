@@ -35,6 +35,7 @@
     "request": "^2.67.0"
   },
   "devDependencies": {
+    "browserify": "^17.0.0",
     "chai": "^3.4.1",
     "coveralls": "^2.11.4",
     "jscoverage": "^0.6.0",

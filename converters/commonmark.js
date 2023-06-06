@@ -5,9 +5,19 @@
 var LI_HEADER = 'H2M_LI_HEADER'
 
 module.exports = {
+  i: function (node) {
+    if (node.md) {
+      return `*${node.md}*`
+    }
+  },
   em: function (node) {
     if (node.md) {
       return `*${node.md}*`
+    }
+  },
+  b: function (node) {
+    if (node.md) {
+      return `**${node.md}**`
     }
   },
   strong: function (node) {
